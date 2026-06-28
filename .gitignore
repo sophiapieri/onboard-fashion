@@ -1,0 +1,25 @@
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Project spec / local notes
+AGENTS.md
+
+# Dependencies
+node_modules/
+
+# Next.js build artifacts
+.next/
+out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS files
+.vscode/
+.DS_Store
+Thumbs.db
