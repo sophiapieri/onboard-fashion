@@ -33,8 +33,10 @@ export default function BoardPage() {
           body: JSON.stringify({ pinterestUrl: 'https://www.pinterest.com', pageName: pageId }),
         });
         const fallbackBoard = (await response.json()) as BoardPage;
+        console.log('Board page received board state:', fallbackBoard);
         setBoard(fallbackBoard);
       } else {
+        console.log('Board page received stored board:', loadedBoard);
         setBoard(loadedBoard);
       }
     } catch {

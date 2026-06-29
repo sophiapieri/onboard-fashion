@@ -21,7 +21,9 @@ export default function PreviewPage() {
       return;
     }
 
-    setBoard(guestBoards[guestBoards.length - 1]);
+    const previewBoard = guestBoards[guestBoards.length - 1];
+    console.log('Preview board loaded:', previewBoard);
+    setBoard(previewBoard);
     setIsLoading(false);
   }, [getGuestBoards, router]);
 
