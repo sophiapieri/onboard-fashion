@@ -7,9 +7,10 @@ interface SidebarProps {
   boards: BoardPage[];
   activeBoardId?: string;
   onNewBoardClick: () => void;
+  onDeleteBoard?: (boardId: string) => void;
 }
 
-export default function Sidebar({ boards, activeBoardId, onNewBoardClick }: SidebarProps) {
+export default function Sidebar({ boards, activeBoardId, onNewBoardClick, onDeleteBoard }: SidebarProps) {
   const router = useRouter();
 
   return (
@@ -27,16 +28,30 @@ export default function Sidebar({ boards, activeBoardId, onNewBoardClick }: Side
           boards.map((board) => {
             const isActive = board.id === activeBoardId;
             return (
-              <button
-                key={board.id}
-                type="button"
-                onClick={() => router.push(`/board/${board.id}`)}
-                className={`w-full rounded-xl px-4 py-3 text-left text-sm transition ${
-                  isActive ? 'bg-sky/70 text-navy' : 'text-muted hover:bg-sand hover:text-navy'
-                }`}
-              >
-                {board.name}
-              </button>
+              <div key={board.id} className={`flex items-center gap-2 rounded-xl px-4 py-3 transition ${
+                isActive ? 'bg-sky/70 text-navy' : 'text-muted hover:bg-sand hover:text-navy'
+              }`}>
+                <button
+                  type="button"
+                  onClick={() => router.push(`/board/${board.id}`)}
+                  className="flex-1 text-left text-sm"
+                >
+                  {board.name}
+                </button>
+                {onDeleteBoard ? (
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onDeleteBoard(board.id);
+                    }}
+                    className="rounded-full p-1 text-xs font-semibold text-navy/70 transition hover:bg-white hover:text-navy"
+                    aria-label={`Delete ${board.name}`}
+                  >
+                    ×
+                  </button>
+                ) : null}
+              </div>
             );
           })
         )}

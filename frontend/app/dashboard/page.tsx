@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import AddPageModal from '@/components/ui/AddPageModal';
 import Sidebar from '@/components/ui/Sidebar';
 import { AuthContext } from '@/components/AuthProvider';
-import { createBoardPage, getBoardPages, importGuestBoard } from '@/lib/firestore';
+import { createBoardPage, deleteBoardPage, getBoardPages, importGuestBoard } from '@/lib/firestore';
 import type { BoardPage, Product } from '@/types';
 
 const aestheticPills = ['Coastal Grandma', 'Dark Academia', 'Clean Girl', 'Quiet Luxury', 'Y2K Revival', 'Cottagecore'];
@@ -18,6 +18,7 @@ export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [unsavedGuestBoards, setUnsavedGuestBoards] = useState<BoardPage[]>([]);
   const [isImportingBoards, setIsImportingBoards] = useState(false);
+  const [deletingBoardId, setDeletingBoardId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!auth?.loading && auth?.isGuest) {
@@ -80,6 +81,21 @@ export default function DashboardPage() {
     }
   };
 
+  const handleDeleteBoard = async (boardId: string) => {
+    if (!auth?.user || !window.confirm('Delete this board from your collection?')) {
+      return;
+    }
+
+    setDeletingBoardId(boardId);
+
+    try {
+      await deleteBoardPage(auth.user.uid, boardId);
+      setBoards((currentBoards) => currentBoards.filter((board) => board.id !== boardId));
+    } finally {
+      setDeletingBoardId(null);
+    }
+  };
+
   const handleQuickCreate = async (aesthetic: string) => {
     if (!auth?.user) {
       return;
@@ -112,7 +128,11 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#F5F5F0]">
       <div className="flex min-h-screen">
-        <Sidebar boards={boards} onNewBoardClick={() => setIsModalOpen(true)} />
+        <Sidebar
+          boards={boards}
+          onNewBoardClick={() => setIsModalOpen(true)}
+          onDeleteBoard={handleDeleteBoard}
+        />
 
         <main className="flex-1 px-6 py-8 sm:px-8 lg:px-10">
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -183,12 +203,25 @@ export default function DashboardPage() {
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {boards.map((board) => (
                   <div key={board.id} className="rounded-2xl border border-sky/40 bg-sand p-5 shadow-sm">
-                    <div className="mb-4 flex flex-wrap gap-2">
-                      {board.aestheticLabels?.slice(0, 3).map((label) => (
-                        <span key={label} className="rounded-full bg-sky/70 px-3 py-1 text-xs font-medium text-navy">
-                          {label}
-                        </span>
-                      ))}
+                    <div className="mb-4 flex items-start justify-between gap-3">
+                      <div className="flex flex-wrap gap-2">
+                        {board.aestheticLabels?.slice(0, 3).map((label) => (
+                          <span key={label} className="rounded-full bg-sky/70 px-3 py-1 text-xs font-medium text-navy">
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          void handleDeleteBoard(board.id);
+                        }}
+                        disabled={deletingBoardId === board.id}
+                        className="rounded-full border border-navy/20 px-3 py-1 text-xs font-semibold text-navy transition hover:bg-white disabled:opacity-60"
+                      >
+                        {deletingBoardId === board.id ? 'Deleting…' : 'Delete'}
+                      </button>
                     </div>
                     <h3 className="font-display text-xl text-navy">{board.name}</h3>
                     <p className="mt-2 text-sm text-muted">{board.products.length} curated picks</p>
