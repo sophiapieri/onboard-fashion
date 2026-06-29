@@ -71,3 +71,4 @@ export default function BoardPage() {
 
   return <BoardView board={board} isLoading={isLoading} error={error} onRetry={loadBoard} onToggleSaved={handleToggleSaved} />;
 }
+//comment
