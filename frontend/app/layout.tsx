@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import { ReactNode } from 'react';
 import { AuthProvider } from '@/components/AuthProvider';
+import Navbar from '@/components/ui/Navbar';
 import { AuthPromptProvider } from '@/lib/hooks/useAuthPrompt';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -20,7 +21,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body>
         <AuthProvider>
-          <AuthPromptProvider>{children}</AuthPromptProvider>
+          <AuthPromptProvider>
+            <Navbar />
+            {children}
+          </AuthPromptProvider>
         </AuthProvider>
       </body>
     </html>

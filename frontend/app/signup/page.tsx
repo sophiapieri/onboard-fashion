@@ -98,13 +98,7 @@ function SignupForm() {
     <main className="flex min-h-screen items-center justify-center bg-[#F5F5F0] px-4 py-10 sm:px-6">
       <div className="w-full max-w-md rounded-3xl border border-sky/70 bg-white p-8 shadow-[0_16px_45px_-24px_rgba(0,28,87,0.45)]">
         <div className="mb-8 flex flex-col items-center">
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-navy">
-            <svg viewBox="0 0 24 24" className="h-7 w-7 text-white" fill="none">
-              <path d="M6 18c1-3 3-5 6-5s5 2 6 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              <path d="M10 7a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z" stroke="currentColor" strokeWidth="1.8" />
-              <path d="M12 3c4 0 7 3 7 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-            </svg>
-          </div>
+          <img src="/logoBlue.jpg" alt="OnBoard logo" className="mb-3 h-12 w-12 rounded-full object-cover" />
           <p className="font-display text-3xl font-semibold tracking-[0.2em] text-navy">ONBOARD</p>
         </div>
 

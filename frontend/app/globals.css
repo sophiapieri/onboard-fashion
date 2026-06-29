@@ -9,3 +9,30 @@
 body {
   @apply bg-white text-navy antialiased;
 }
+
+@keyframes sailMove {
+  0% {
+    transform: translateX(-140%);
+  }
+  100% {
+    transform: translateX(120vw);
+  }
+}
+
+@keyframes waveFloat {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(6px) translateY(-4px);
+  }
+}
+
+.loading-sailboat {
+  animation: sailMove 4s ease-in-out infinite;
+}
+
+.loading-wave {
+  animation: waveFloat 2.4s ease-in-out infinite;
+}
